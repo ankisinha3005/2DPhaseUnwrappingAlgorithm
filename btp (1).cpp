@@ -68,7 +68,7 @@ void funcQGPU_Hist(vector<vector<double> >ph, vector<vector<double> > &phaseQual
                   	
 }
 vector<vector<double> > funcQualityMap(vector<vector<double> > ph){
-	double win = 1;
+	int win = 1;
 	int m = ph.size();
 	int n = ph[0].size();
 	vector<vector<double> > phPad(m+2,vector<double>(n+2,0));
@@ -77,6 +77,10 @@ vector<vector<double> > funcQualityMap(vector<vector<double> > ph){
 	} //padding the left,right,top and bottom rows with zeroes;
 	vector<vector<double> > phaseQualityMap(m+2,vector<double>(n+2,0));
 	double max = INT_MIN;
+	//below loop
+	// i think there is  a problem in the loop ,it should run for  i=1 : i<m-1
+	// similarly for j =1 : j<n-1
+	
 	for(int k=win;k<=m;k++){
 		for(int l=win;l<=n;l++){
 		double H,V,D1,D2;
@@ -90,8 +94,9 @@ vector<vector<double> > funcQualityMap(vector<vector<double> > ph){
  }
 	//resuing the given array 
 	 for(int i=1;i<=m;i++){
-		for(int j=1;j<=n;j++) ph[i-1][j-1]=phPad[i][j]/max;
+		for(int j=1;j<=n;j++) phaseQualityMap[i-1][j-1]=phPad[i][j]/max;
 	}
+	
 	for(int i=0;i<n;i++){
 		ph[i][0]=1;
 		ph[i][1]=1;
