@@ -26,6 +26,7 @@ void funcQGPU_Hist(vector<vector<double> >ph, vector<vector<double> > &phaseQual
     	phase2DQG[x][y]=ph[x][y];
     	treated[x][y]=1;
 	}
+	// change n and m 
 	int n = ph.size();
 	int m = ph[0].size();
 	for(int i=0;i<sort_values.size();i++){
@@ -140,8 +141,8 @@ void funcQGPU(vector<vector<double> > ph, int nbins){
 	int m = ph.size();
 	int n = ph[0].size();
 	vector<phase> sort_values; //sorted values of quality map; 
-	 for(int i=0;i<n;i++){
-	 	for(int j=0;j<m;j++){
+	 for(int i=0;i<m;i++){
+	 	for(int j=0;j<n;j++){
 	 		phase t;
 	 		t.val = phaseQualityMap[i][j];
 	 		t.row=i;
@@ -151,8 +152,8 @@ void funcQGPU(vector<vector<double> > ph, int nbins){
 	 }
 	 sort(sort_values.begin(),sort_values.end(),comp);
 	 vector<double> histcounts = linespace(0,1,nbins);
-	 vector<vector<int> > treated (n,vector<int>(m,0)); //which pixels were treated; 
-	 vector<vector<double> > phase2DQG (n,vector<double>(m,0));//final ans;
+	 vector<vector<int> > treated (m,vector<int>(n,0)); //which pixels were treated; 
+	 vector<vector<double> > phase2DQG (m,vector<double>(n,0));//final ans;
 	 for(int i=0;i<histcounts.size();i++){
 	 	double thr = histcounts[i];
 	 	funcQGPU_Hist(ph,phaseQualityMap,treated,sort_values,thr,phase2DQG);
