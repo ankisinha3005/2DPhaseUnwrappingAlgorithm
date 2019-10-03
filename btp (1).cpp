@@ -72,17 +72,21 @@ vector<vector<double> > funcQualityMap(vector<vector<double> > ph){
 	int m = ph.size();
 	int n = ph[0].size();
 	vector<vector<double> > phPad(m+2,vector<double>(n+2,0));
-	for(int i=1;i<=m-1;i++){
-		for(int j=1;j<=n-1;j++) phPad[i][j]=ph[i-1][j-1];
-	} //padding the left,right,top and bottom rows with zeroes;
+// 	for(int i=1;i<=m-1;i++){
+// 		for(int j=1;j<=n-1;j++) phPad[i][j]=ph[i-1][j-1];
+// 	}
+	for(int i=0;i<m;i++){
+		for(int j=0;j<n;j++)phPad[i+1][j+1]=ph[i][j];
+	}
+	//padding the left,right,top and bottom rows with zeroes;
 	vector<vector<double> > phaseQualityMap(m+2,vector<double>(n+2,0));
 	double max = INT_MIN;
 	//below loop
 	// i think there is  a problem in the loop ,it should run for  i=1 : i<m-1
 	// similarly for j =1 : j<n-1
 	
-	for(int k=win;k<=m;k++){
-		for(int l=win;l<=n;l++){
+	for(int k=win;k<m-1;k++){
+		for(int l=win;l<n-1;l++){
 		double H,V,D1,D2;
 		  H = funcwrap1(phPad[k][l-1]- phPad[k][l]) -   funcwrap1(phPad[k][l] - phPad[k][l+1]);
           V = funcwrap1(phPad[k-1][l] - phPad[k][l]) -   funcwrap1(phPad[k][l] - phPad[k+1][l]);
@@ -92,9 +96,16 @@ vector<vector<double> > funcQualityMap(vector<vector<double> > ph){
           if(max<phaseQualityMap[k][l])max=phaseQualityMap[k][l];
 	}
  }
+	
+	
+	
+	
+	
+	
 	//resuing the given array 
+	// i think sir has done some mistake , if he has already resized the array why would he 
 	 for(int i=1;i<=m;i++){
-		for(int j=1;j<=n;j++) phaseQualityMap[i-1][j-1]=phPad[i][j]/max;
+		for(int j=1;j<=n;j++) phaseQualityMap[i-1][j-1]=phaseQualityMap[i][j]/max;
 	}
 	
 	for(int i=0;i<n;i++){
