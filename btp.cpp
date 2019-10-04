@@ -3,10 +3,11 @@
 using namespace std;
 
 
-bool check(double a,double b){
+bool check(double a,double b){                       //A function to check if two double are equal
     if(abs(a-b)<DBL_EPSILON)
-      return true;
-  return false;  
+       return true; 
+    else                                    
+       return false;  
 }
 class phase{
 	public:
@@ -14,13 +15,13 @@ class phase{
 	int row;
 	int col;
 };
-double pi = 3.14159;
+double pi = 3.14159;                                     //pi value
 
-bool comp(const phase a1,const phase a2){
+bool comp(const phase a1,const phase a2){               //comparator for sorting the array
 	return a1.val<a2.val;
 }
 
-double funcwrap1(double x){              
+double funcwrap1(double x){                            //wrapper
 	double y = fmod(x,2*pi)-pi;
 	return y;
 }
