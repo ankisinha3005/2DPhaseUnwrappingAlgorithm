@@ -2,6 +2,9 @@
 #include "matplotlibcpp.h"
 namespace plt = matplotlibcpp;
 using namespace std;
+
+//sudo apt-get install python-matplotlib python-numpy python2.7-dev 
+//g++ btp.cpp -std=c++11 -I/usr/include/python2.7 -lpython2.7
 class phase{
 	public:
 	double val;
@@ -32,7 +35,7 @@ void funcQGPU_Hist(vector<vector<double> >ph, vector<vector<double> > &phaseQual
 	for(int i=0;i<sort_values.size();i++){
 		x = sort_values[i].row;
 		y = sort_values[i].col;
-		if(treated[x][y]==1){
+		if(treated[x][y]==0){
 			int a,b,c,d,e,f,g,h;
 			a=2;
 			b=2;
@@ -46,9 +49,9 @@ void funcQGPU_Hist(vector<vector<double> >ph, vector<vector<double> > &phaseQual
 			if(x<n-1 && treated[x+1][y]==1 && phaseQualityMap[x+1][y]<thr)c = phaseQualityMap[x+1][y];
 			if(y<m-1 && treated[x][y+1]==1 && phaseQualityMap[x][y+1]<thr)d = phaseQualityMap[x][y+1];
 			if(y>0 && x>0 && treated[x-1][y-1]==1 && phaseQualityMap[x-1][y-1]<thr)  e = phaseQualityMap[x-1][y-1];
-			if(y>0 && x<n-1 && treated[x][y-1]==1 && phaseQualityMap[x+1][y-1]<thr)  f = phaseQualityMap[x+1][y-1];
-			if(y<m-1 && x>0 && treated[x][y-1]==1 && phaseQualityMap[x-1][y+1]<thr)  g = phaseQualityMap[x-1][y+1];
-			if(y<m-1 && x<n-1 && treated[x][y-1]==1 && phaseQualityMap[x+1][y+1]<thr)h = phaseQualityMap[x+1][y+1];
+			if(y>0 && x<n-1 && treated[x+1][y-1]==1 && phaseQualityMap[x+1][y-1]<thr)  f = phaseQualityMap[x+1][y-1];
+			if(y<m-1 && x>0 && treated[x-1][y+1]==1 && phaseQualityMap[x-1][y+1]<thr)  g = phaseQualityMap[x-1][y+1];
+			if(y<m-1 && x<n-1 && treated[x+1][y+1]==1 && phaseQualityMap[x+1][y+1]<thr)h = phaseQualityMap[x+1][y+1];
 			int val = min(a,min(b,min(c,min(d,min(e,min(f,min(g,h)))))));
 			int temp=INT_MAX;
 			if(val==a && a!=2)temp = phase2DQG[x-1][y]-ph[x][y];
@@ -59,8 +62,9 @@ void funcQGPU_Hist(vector<vector<double> >ph, vector<vector<double> > &phaseQual
 			if(val==f && f!=2)temp = phase2DQG[x+1][y-1]-ph[x][y];
 			if(val==g && g!=2)temp = phase2DQG[x-1][y+1]-ph[x][y];
 			if(val==h && h!=2)temp = phase2DQG[x+1][y+1]-ph[x][y];
+			
 			if(temp!=INT_MAX){
-		    temp = 2*pi*round(temp/(2*pi));
+		       temp = 2*pi*round(temp/(2*pi));
 			phase2DQG[x][y]=temp+ph[x][y];
 			treated[x][y]=1;}
 			
