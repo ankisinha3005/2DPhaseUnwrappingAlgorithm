@@ -1,14 +1,12 @@
 #include<bits/stdc++.h>
-//#include "matplotlibcpp.h"
-//namespace plt = matplotlibcpp;
+
 using namespace std;
 
-//sudo apt-get install python-matplotlib python-numpy python2.7-dev 
-//g++ btp.cpp -std=c++11 -I/usr/include/python2.7 -lpython2.7
+
 bool check(double a,double b){
     if(abs(a-b)<DBL_EPSILON)
       return true;
-    return false;  
+  return false;  
 }
 class phase{
 	public:
@@ -138,7 +136,8 @@ vector<vector<double> > funcQualityMap(vector<vector<double> > ph){
 	return phaseQualityMap2;
 }
 
-vector<double> linespace(double min, double max, int n){
+vector<double> linespace(double min, double max, int n){                    // A function to generate 
+                                                                           //equal spaced threshold values
  	vector<double> result;
  	int iterator = 0;
  
@@ -153,15 +152,16 @@ vector<double> linespace(double min, double max, int n){
 void funcQGPU(vector<vector<double> > ph, int nbins){
 	vector<vector<double> > phaseQualityMap = funcQualityMap(ph);
  
-	int m = ph.size();
-	int n = ph[0].size();
-//   for(int i=0;i<m;i++){
-//       for(int j=0;j<n;j++)cout<<phaseQualityMap[i][j]<<" ";
-//       cout<<"\n";
-//   }
-
-	vector<phase> sort_values; //sorted values of quality map; 
+	int m = ph.size();                                                     //number of rows
+	int n = ph[0].size();                                                 //number of columns
+	
+    vector<phase> sort_values;                                                /*A linear array to store the
+                                            	                                phaseQualityMap values and its
+                                            	                                locations and sort them according
+                                            	                                to the quality value
+                                            	                             */ 
 	 for(int i=0;i<m;i++){
+	     
 	 	for(int j=0;j<n;j++){
 	 		phase t;
 	 		t.val = phaseQualityMap[i][j];
@@ -169,22 +169,27 @@ void funcQGPU(vector<vector<double> > ph, int nbins){
 	 		t.col = j;
 	 		sort_values.push_back(t);
 		 }
+		 
 	 }
-	 sort(sort_values.begin(),sort_values.end(),comp);
-// 	 for(int i=0;i<sort_values.size();i++)
-// 	   cout<<" sort_values ="<<sort_values[i].val<<" i= "<<sort_values[i].row<<" j ="<<sort_values[i].col<<"\n";
-	 vector<double> histcounts = linespace(0,1,nbins);
+	 
+	 sort(sort_values.begin(),sort_values.end(),comp);  // sorting the array
+
+	 vector<double> histcounts = linespace(0,1,nbins);  //stores the different value of threshold
 	 vector<vector<int> > treated (m,vector<int>(n,0)); //which pixels were treated; 
-	 vector<vector<double> > phase2DQG (m,vector<double>(n,0));//final ans;
+	 vector<vector<double> > phase2DQG (m,vector<double>(n,0));//final answer;
+	 
+	 //function calling for different values of threshold
+	 
 	 for(int i=0;i<histcounts.size();i++){
 	 	double thr = histcounts[i];
-	 //	cout<<histcounts[i]<<" ";
 	 	funcQGPU_Hist(ph,phaseQualityMap,treated,sort_values,thr,phase2DQG);
 	 }
-  
+	 
+	 
+   // printing the final answer
   for(int i=0;i<10;i++){
         for(int j=0;j<10;j++)
-         cout<<phase2DQG[i][j]<<"( "<<treated[i][j]<<")"<<" ";
+         cout<<phase2DQG[i][j]<<"( "<<treated[i][j]<<")"<<" ";    
          cout<<"\n";
     }
 
@@ -196,7 +201,8 @@ int main(){
 // 	phase = peaks(100) % 100 X 100 matrix
 //         S = exp(1i*phase);
 //         wrapped_phase = angle(S);
-	vector<vector<double> > ph2D(m,vector<double>(n));
+
+	vector<vector<double> > ph2D(m,vector<double>(n));   //input phase matrix
 	for(int i=0;i<m;i++){
 		for(int j=0;j<n;j++){
 			double temp;
@@ -206,32 +212,13 @@ int main(){
 		}
 	}
 
-    funcQGPU(ph2D,10);
+    funcQGPU(ph2D,10); // Function call in the main function which does the unwrapping
     
-   cout<<ph2D[6][7];
 
 
 
-//	
-//	
-//	std::vector<std::vector<double>> x, y, z;
-//    for (double i = -5; i <= 5;  i += 0.25) {
-//        std::vector<double> x_row, y_row, z_row;
-//        for (double j = -5; j <= 5; j += 0.25) {
-//            x_row.push_back(i);
-//            y_row.push_back(j);
-//            z_row.push_back(::std::sin(::std::hypot(i, j)));
-//        }
-//        x.push_back(x_row);
-//        y.push_back(y_row);
-//        z.push_back(z_row);
-//    }
-//
-//    plt::plot_surface(x, y, z);
-//    plt::show();
-	
-	
-	
+
+
 	
 	
 	
