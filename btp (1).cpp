@@ -107,10 +107,9 @@ vector<vector<double> > funcQualityMap(vector<vector<double> > ph){
 	
 	
 	
-	//resuing the given array 
-	// i think sir has done some mistake , if he has already resized the array why would he 
+	//reusing the array ph
 	 for(int i=1;i<=m;i++){
-		for(int j=1;j<=n;j++) phaseQualityMap[i-1][j-1]=phaseQualityMap[i][j]/max;
+		for(int j=1;j<=n;j++) ph[i-1][j-1]=phPad[i][j]/max;
 	}
 	
 	for(int i=0;i<n;i++){
