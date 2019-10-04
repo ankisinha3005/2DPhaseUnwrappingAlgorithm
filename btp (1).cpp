@@ -166,10 +166,15 @@ void funcQGPU(vector<vector<double> > ph, int nbins){
 int main(){
 	int m;
 	int n;
-	vector<vector<int> > a(n,vector<int>(m));
-	for(int i=0;i<n;i++){
-		for(int j=0;j<m;j++){
-			cin>>a[i][j];
+// 	phase = peaks(100) % 100 X 100 matrix
+//         S = exp(1i*phase);
+//         wrapped_phase = angle(S);
+	vector<vector<phase> > ph2D(m,vector<phase>(n));
+	for(int i=0;i<m;i++){
+		for(int j=0;j<n;j++){
+			double temp;
+			cin>>temp;
+			ph2D.push_back({temp,i,j});
 		}
 	}
 	
